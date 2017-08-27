@@ -1,0 +1,67 @@
+读写数据到文件中（非SD卡），不需要任何权限
+文件会存储在 /data/data/包名/files/目录下
+
+1、将数据存储到文件中
+
+private void save(String inputText){
+		
+		FileOutputStream out=null;
+		BufferedWriter writer=null;
+		
+		try {
+			out=openFileOutput("myData.txt",Context.MODE_PRIVATE);
+		    writer=new BufferedWriter(new OutputStreamWriter(out));
+		    writer.write(inputText);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			
+			try {
+			if(writer!=null){
+					writer.close();
+			}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			
+			
+		}
+}
+"myData.txt":表示文件名
+Context.MODE_PRIVATE:表示当指定同样文件名时，写入的数据会覆盖原来的数据
+Context.MODE_APPEND：表示文件如果已经存在就往文件里面追加内容，不存在就新建文件
+
+2、从文件中读取数据
+
+private String load(){
+		
+		FileInputStream in=null;
+		BufferedReader reader=null;
+		StringBuilder content=new StringBuilder();
+		
+		try {
+			in=openFileInput("myData.txt");
+			reader=new BufferedReader(new InputStreamReader(in));
+			String line="";
+			while((line=reader.readLine())!=null){
+				content.append(line);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(reader!=null){
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		
+		return content.toString();
+	}
